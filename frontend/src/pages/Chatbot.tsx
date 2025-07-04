@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './styles.css';
+import Home from './Home';
 
 const Chatbot = () => {
   const [userMessage, setUserMessage] = useState('');
@@ -9,7 +10,7 @@ const Chatbot = () => {
 
   useEffect(() => {
     setChatHistory([
-      { sender: 'bot', message: '👋 Hello! I am ZyrixCraft. How can I help you today?' },
+      { sender: 'bot', message: '👋 Hello! I am GrantGuide. How can I help you today?' },
     ]);
   }, []);
 
@@ -48,10 +49,12 @@ const Chatbot = () => {
   };
 
   return (
+    <>
+    <Home />
     <div className="chat-container">
       <div className="chat-window">
         <div className="chat-header">
-          <h2>ZyrixCraft Chatbot</h2>
+          <h2>GrantGuide Chatbot</h2>
         </div>
         <div className="chat-body">
           {chatHistory.map((chat, index) => (
@@ -75,6 +78,7 @@ const Chatbot = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
