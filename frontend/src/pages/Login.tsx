@@ -12,12 +12,9 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try{
-      await login(email, password);
-      if(localStorage.getItem('role') === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
+      const response = await login(email, password);
+      localStorage.setItem('token', response.token);
+      navigate('/profile-form');
     }
     catch{
       setError('Failed to login. Please check your credentials.')

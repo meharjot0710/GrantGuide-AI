@@ -2,17 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './styles.css';
 import Home from './Home';
+import { useNavigate } from 'react-router-dom';
 
 const Chatbot = () => {
   const [userMessage, setUserMessage] = useState('');
   const [chatHistory, setChatHistory] = useState<any[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+    }
     setChatHistory([
       { sender: 'bot', message: '👋 Hello! I am GrantGuide. How can I help you today?' },
     ]);
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
