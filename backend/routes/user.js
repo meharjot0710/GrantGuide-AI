@@ -8,7 +8,8 @@ require('dotenv').config();
 
 router.get('/get-info', verifyToken, async (req, res) => {
     try {
-        const user = await User.findById(req.user);
+        const userId = req.user.userId || req.user._id || req.user.id;
+        const user = await User.findById(userId);
         if (!user) {
         return res.status(401).json({ message: 'Unauthorized' });
         }
@@ -58,6 +59,8 @@ router.post('/update-info', verifyToken, async (req, res) => {
         if (typeof hasPrototype !== 'undefined') user.hasPrototype = hasPrototype === true || hasPrototype === 'true';
         if (grantTypeNeeded) user.grantTypeNeeded = Array.isArray(grantTypeNeeded) ? grantTypeNeeded : grantTypeNeeded.split(',').map(i => i.trim());
         if (techStack) user.techStack = Array.isArray(techStack) ? techStack : techStack.split(',').map(i => i.trim());
+
+        user.profileCompleted = true;
 
         await user.save();
 

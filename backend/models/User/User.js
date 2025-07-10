@@ -49,6 +49,7 @@ const userSchema = new mongoose.Schema(
     hasPrototype: { type: Boolean },
     grantTypeNeeded: [{ type: String }],
     techStack: [{ type: String }],
+    profileCompleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
