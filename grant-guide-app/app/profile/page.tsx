@@ -66,7 +66,20 @@ export default function ProfilePage() {
     setSubmitting(true)
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/user/update-info', profileData, {
+      const payload = {
+        name: profileData.name,
+        email: profileData.email,
+        userType: profileData.organizationType,
+        // Split location into region and country if possible
+        region: profileData.location.split(',')[0]?.trim() || '',
+        country: profileData.location.split(',')[1]?.trim() || '',
+        domainFocus: profileData.contactPerson,
+        phone: profileData.phoneNumber,
+        website: profileData.website,
+        foundedYear: profileData.foundedYear,
+        goals: profileData.description,
+      };
+      await axios.post('http://localhost:5000/api/user/update-info', payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Profile updated successfully!');

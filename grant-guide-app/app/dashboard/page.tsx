@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -12,17 +12,15 @@ import { useAuth } from "../../hooks/useAuth"
 import axios from "axios"
 
 export default function DashboardPage() {
-  const [chatMessage, setChatMessage] = useState("")
-  const [chatMessages, setChatMessages] = useState([
-    {
-      id: 1,
-      sender: "bot",
-      message:
-        "Yes, a Permanent Account Number (PAN) card is required for this grant application. Make sure to include a copy in your submission.",
-    },
-  ])
+  // Store chat as an array of strings: even = bot, odd = user
+  const [chatHistory, setChatHistory] = useState([
+    "Hello welcome to GrantGuide AI. How can I help you today?"
+  ]);
+  const [userMessage, setUserMessage] = useState("");
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const [userName, setUserName] = useState('');
   const [loadingUser, setLoadingUser] = useState(true);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     async function fetchUser() {
@@ -33,6 +31,7 @@ export default function DashboardPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserName(res.data.user.name || '');
+        setUserProfile(res.data.user);
       } catch (err) {
         // Optionally handle error
       } finally {
@@ -44,19 +43,91 @@ export default function DashboardPage() {
 
   const { logout } = useAuth();
 
-  const handleSendMessage = () => {
-    if (chatMessage.trim()) {
-      setChatMessages([
-        ...chatMessages,
-        {
-          id: chatMessages.length + 1,
-          sender: "user",
-          message: chatMessage,
-        },
-      ])
-      setChatMessage("")
+  const handleSendMessage = async () => {
+    if (userMessage.trim()) {
+      setChatHistory((prev) => [...prev, userMessage]);
+      try {
+        setUserMessage("");
+        const response = await fetch('http://localhost:5000/api/chatbot', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chat: [...chatHistory, userMessage], user: userProfile }),
+        });
+        const data = await response.json();
+        if (data.answer) {
+          let botMessage = data.answer;
+          // Try to extract the text from Gemini's response structure
+          if (
+            typeof botMessage === 'object' &&
+            botMessage.candidates &&
+            botMessage.candidates[0]?.content?.parts &&
+            Array.isArray(botMessage.candidates[0].content.parts)
+          ) {
+            const part = botMessage.candidates[0].content.parts[0];
+            botMessage = typeof part === 'object' && part.text ? part.text : part;
+          }
+          setChatHistory((prev) => [
+            ...prev,
+            typeof botMessage === 'string' ? botMessage : JSON.stringify(botMessage),
+          ]);
+        } else {
+          setChatHistory((prev) => [
+            ...prev,
+            'Something went wrong. Please try again.',
+          ]);
+        }
+      } catch (error) {
+        setChatHistory((prev) => [
+          ...prev,
+          'Something went wrong. Please try again.',
+        ]);
+      }
     }
-  }
+  };
+
+  // Add this function to handle the Generate Email button
+  const handleGenerateEmail = async () => {
+    const emailPrompt = 'Generate an email to a Microsoft contact regarding my grant application.';
+    setChatHistory((prev) => [...prev, emailPrompt]);
+    try {
+      const response = await fetch('http://localhost:5000/api/chatbot', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat: [...chatHistory, emailPrompt], user: userProfile }),
+      });
+      const data = await response.json();
+      if (data.answer) {
+        let botMessage = data.answer;
+        if (
+          typeof botMessage === 'object' &&
+          botMessage.candidates &&
+          botMessage.candidates[0]?.content?.parts &&
+          Array.isArray(botMessage.candidates[0].content.parts)
+        ) {
+          const part = botMessage.candidates[0].content.parts[0];
+          botMessage = typeof part === 'object' && part.text ? part.text : part;
+        }
+        setChatHistory((prev) => [
+          ...prev,
+          typeof botMessage === 'string' ? botMessage : JSON.stringify(botMessage),
+        ]);
+      } else {
+        setChatHistory((prev) => [
+          ...prev,
+          'Something went wrong. Please try again.',
+        ]);
+      }
+    } catch (error) {
+      setChatHistory((prev) => [
+        ...prev,
+        'Something went wrong. Please try again.',
+      ]);
+    }
+  };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatHistory]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
@@ -100,11 +171,11 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-6 mb-8">
               <div className="flex items-center">
                 <MapPin className="w-5 h-5 text-gray-500 mr-2" />
-                <span className="text-gray-700">Rajasthan</span>
+                <span className="text-gray-700">{userProfile ? [userProfile.region, userProfile.country].filter(Boolean).join(', ') : 'Location'}</span>
               </div>
               <div className="flex items-center">
                 <Building className="w-5 h-5 text-gray-500 mr-2" />
-                <span className="text-gray-700">Education NGO</span>
+                <span className="text-gray-700">{userProfile ? userProfile.userType : 'Organization Type'}</span>
               </div>
               <div className="flex items-center">
                 <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
@@ -189,13 +260,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Chat Sidebar */}
-        <div className="w-80 bg-white border-l shadow-sm">
+        <div className="w-80 bg-white border-l shadow-sm flex flex-col">
           <div className="p-4 border-b">
             <h3 className="text-lg font-semibold">AI Assistant</h3>
           </div>
 
-          <div className="flex-1 p-4">
-            <div className="mb-4">
+          <div className="flex-1 p-4 flex flex-col">
+            <div className="mb-4 flex-1 overflow-y-auto">
               <div className="flex items-center mb-2">
                 <Avatar className="w-8 h-8 mr-2">
                   <AvatarFallback className="bg-blue-600 text-white">
@@ -206,17 +277,18 @@ export default function DashboardPage() {
               </div>
 
               <div className="space-y-4">
-                {chatMessages.map((msg) => (
-                  <div key={msg.id} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                {chatHistory.map((message, idx) => (
+                  <div key={idx} className={`flex ${idx % 2 === 1 ? "justify-end" : "justify-start"}`}>
                     <div
                       className={`max-w-xs p-3 rounded-lg ${
-                        msg.sender === "user" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"
+                        idx % 2 === 1 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-900"
                       }`}
                     >
-                      {msg.message}
+                      {message}
                     </div>
                   </div>
                 ))}
+                <div ref={messagesEndRef} />
               </div>
             </div>
 
@@ -224,16 +296,16 @@ export default function DashboardPage() {
               <div className="flex space-x-2">
                 <Input
                   placeholder="Ask GrantBot..."
-                  value={chatMessage}
-                  onChange={(e) => setChatMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+                  value={userMessage}
+                  onChange={(e) => setUserMessage(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 />
                 <Button size="sm" onClick={handleSendMessage}>
                   <Send className="w-4 h-4" />
                 </Button>
               </div>
 
-              <Button variant="outline" className="w-full mt-2 text-sm bg-transparent">
+              <Button variant="outline" className="w-full mt-2 text-sm bg-transparent" onClick={handleGenerateEmail}>
                 Generate Email to Microsoft Contact
               </Button>
             </div>

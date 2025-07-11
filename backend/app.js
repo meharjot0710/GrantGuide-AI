@@ -22,9 +22,11 @@ mongoose.connect(process.env.MONGODB_URI || '', {
 
 const userRoutes = require('./routes/user');
 const authRoutes = require('./routes/auth');
+const chatbotRoutes = require('./routes/chatbot');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 app.post("/webhook", (req, res) => {
     const event = req.body;
