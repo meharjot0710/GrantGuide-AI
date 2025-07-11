@@ -19,12 +19,13 @@ export default function LoginPage() {
   })
   const [error, setError] = useState("")
   const { login } = useAuth()
+  const apiUrl = 'https://grantguide-ai.onrender.com';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', formData)
+      const response = await axios.post(`${apiUrl}/api/auth/login`, formData)
       login(response.data.token)
     } catch (err) {
       setError('Failed to login. Please check your credentials.')

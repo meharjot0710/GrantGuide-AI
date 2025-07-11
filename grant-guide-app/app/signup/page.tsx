@@ -22,6 +22,7 @@ export default function SignupPage() {
   const [error, setError] = useState("")
   const router = useRouter()
   const { login } = useAuth();
+  const apiUrl = 'https://grantguide-ai.onrender.com';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -33,14 +34,14 @@ export default function SignupPage() {
     }
     
     try {
-      await axios.post('http://localhost:5000/api/auth/signup', {
+      await axios.post(`${apiUrl}/api/auth/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,
         address: ""
       })
       // Automatically log in after signup
-      const res = await axios.post('http://localhost:5000/api/auth/login', {
+      const res = await axios.post(`${apiUrl}/api/auth/login`, {
         email: formData.email,
         password: formData.password
       });

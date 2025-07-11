@@ -68,7 +68,8 @@ export default function OnboardingPage() {
     setSubmitting(true)
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/user/update-info', formData, {
+      const apiUrl = 'https://grantguide-ai.onrender.com';
+      await axios.post(`${apiUrl}/api/user/update-info`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       router.push('/profile');

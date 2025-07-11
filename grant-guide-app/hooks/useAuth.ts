@@ -47,7 +47,8 @@ export function useAuth() {
     const token = getToken();
     if (!token) return null;
     try {
-      const res = await axios.get('http://localhost:5000/api/user/get-info', {
+      const apiUrl = 'https://grantguide-ai.onrender.com';
+      const res = await axios.get(`${apiUrl}/api/user/get-info`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return res.data.user;

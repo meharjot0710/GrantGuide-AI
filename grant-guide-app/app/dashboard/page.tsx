@@ -21,13 +21,14 @@ export default function DashboardPage() {
   const [userName, setUserName] = useState('');
   const [loadingUser, setLoadingUser] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://grantguide-ai.onrender.com';
 
   useEffect(() => {
     async function fetchUser() {
       const token = localStorage.getItem('token');
       if (!token) return setLoadingUser(false);
       try {
-        const res = await axios.get('http://localhost:5000/api/user/get-info', {
+        const res = await axios.get(`${apiUrl}/api/user/get-info`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserName(res.data.user.name || '');
@@ -48,7 +49,7 @@ export default function DashboardPage() {
       setChatHistory((prev) => [...prev, userMessage]);
       try {
         setUserMessage("");
-        const response = await fetch('http://localhost:5000/api/chatbot', {
+        const response = await fetch(`${apiUrl}/api/chatbot`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ chat: [...chatHistory, userMessage], user: userProfile }),
@@ -90,7 +91,7 @@ export default function DashboardPage() {
     const emailPrompt = 'Generate an email to a Microsoft contact regarding my grant application.';
     setChatHistory((prev) => [...prev, emailPrompt]);
     try {
-      const response = await fetch('http://localhost:5000/api/chatbot', {
+      const response = await fetch(`${apiUrl}/api/chatbot`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ chat: [...chatHistory, emailPrompt], user: userProfile }),

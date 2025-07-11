@@ -31,13 +31,14 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false)
   const { logout } = useAuth();
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://grantguide-ai.onrender.com';
 
   useEffect(() => {
     async function fetchProfile() {
       const token = localStorage.getItem('token');
       if (!token) return setLoading(false);
       try {
-        const res = await axios.get('http://localhost:5000/api/user/get-info', {
+        const res = await axios.get(`${apiUrl}/api/user/get-info`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const user = res.data.user;
@@ -79,7 +80,7 @@ export default function ProfilePage() {
         foundedYear: profileData.foundedYear,
         goals: profileData.description,
       };
-      await axios.post('http://localhost:5000/api/user/update-info', payload, {
+      await axios.post(`${apiUrl}/api/user/update-info`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert('Profile updated successfully!');
