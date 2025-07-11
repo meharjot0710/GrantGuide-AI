@@ -34,7 +34,7 @@ export default function SignupPage() {
     }
     
     try {
-      await axios.post(`${apiUrl}/api/auth/signup`, {
+      await axios.post(`https://grantguide-ai.onrender.com/api/auth/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,
