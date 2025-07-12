@@ -320,10 +320,10 @@ export default function DashboardPage() {
           </div>
 
           {/* Chat Sidebar */}
-          <div className={`fixed lg:static inset-y-0 right-0 z-50 w-full sm:w-80 bg-white border-l shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          <div className={`fixed lg:static inset-y-0 right-0 z-50 w-full sm:w-80 bg-white border-l shadow-sm flex flex-col transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:h-screen ${
             chatOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'
           }`}>
-            <div className="p-4 border-b flex items-center justify-between">
+            <div className="p-4 border-b flex items-center justify-between flex-shrink-0">
               <h3 className="text-lg font-semibold">AI Assistant</h3>
               <Button
                 variant="ghost"
@@ -364,7 +364,7 @@ export default function DashboardPage() {
               </div>
 
               {/* Input Area - Fixed at Bottom */}
-              <div className="p-4 border-t bg-white">
+              <div className="p-4 border-t bg-white flex-shrink-0">
                 <div className="flex space-x-2 mb-2">
                   <Input
                     placeholder="Ask GrantBot..."
