@@ -24,6 +24,24 @@ export default function DashboardPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://grantguide-ai.onrender.com';
+  const [showDocs, setShowDocs] = useState<{ [key: string]: boolean }>({});
+  const requiredDocs: { [key: string]: string[] } = {
+    'AI for Accessibility': [
+      'Proof of Disability Inclusion',
+      'Project Proposal',
+      'Budget Plan',
+    ],
+    'TechSpark': [
+      'Organization Registration Certificate',
+      'Last Year Financial Report',
+      'Project Proposal',
+    ],
+    'Microsoft Global Skills Initiative': [
+      'Skills Initiative Application Form',
+      'Organization Profile',
+      'Impact Statement',
+    ],
+  };
 
   useEffect(() => {
     async function fetchUser() {
@@ -271,6 +289,20 @@ export default function DashboardPage() {
                       <Calendar className="w-4 h-4 mr-2" />
                       <span>Deadline: August 15, 2025</span>
                     </div>
+                    <Button
+                      variant="outline"
+                      className="w-full text-sm mt-2"
+                      onClick={() => setShowDocs((prev) => ({ ...prev, 'AI for Accessibility': !prev['AI for Accessibility'] }))}
+                    >
+                      {showDocs['AI for Accessibility'] ? 'Hide Required Documents' : 'Show Required Documents'}
+                    </Button>
+                    {showDocs['AI for Accessibility'] && (
+                      <ul className="mt-2 text-sm text-gray-700 list-disc list-inside bg-gray-50 rounded p-2">
+                        {requiredDocs['AI for Accessibility'].map((doc, idx) => (
+                          <li key={idx}>{doc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -290,7 +322,21 @@ export default function DashboardPage() {
                       <Calendar className="w-4 h-4 mr-2" />
                       <span>Deadline: July 30, 2025</span>
                     </div>
-                    <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black text-sm">Apply Now</Button>
+                    <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black text-sm mb-2">Apply Now</Button>
+                    <Button
+                      variant="outline"
+                      className="w-full text-sm"
+                      onClick={() => setShowDocs((prev) => ({ ...prev, TechSpark: !prev.TechSpark }))}
+                    >
+                      {showDocs.TechSpark ? 'Hide Required Documents' : 'Show Required Documents'}
+                    </Button>
+                    {showDocs.TechSpark && (
+                      <ul className="mt-2 text-sm text-gray-700 list-disc list-inside bg-gray-50 rounded p-2">
+                        {requiredDocs['TechSpark'].map((doc, idx) => (
+                          <li key={idx}>{doc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -309,6 +355,20 @@ export default function DashboardPage() {
                       <Calendar className="w-4 h-4 mr-2" />
                       <span>July 23, 2025</span>
                     </div>
+                    <Button
+                      variant="outline"
+                      className="w-full text-sm mt-2"
+                      onClick={() => setShowDocs((prev) => ({ ...prev, 'Microsoft Global Skills Initiative': !prev['Microsoft Global Skills Initiative'] }))}
+                    >
+                      {showDocs['Microsoft Global Skills Initiative'] ? 'Hide Required Documents' : 'Show Required Documents'}
+                    </Button>
+                    {showDocs['Microsoft Global Skills Initiative'] && (
+                      <ul className="mt-2 text-sm text-gray-700 list-disc list-inside bg-gray-50 rounded p-2">
+                        {requiredDocs['Microsoft Global Skills Initiative'].map((doc, idx) => (
+                          <li key={idx}>{doc}</li>
+                        ))}
+                      </ul>
+                    )}
                   </CardContent>
                 </Card>
               </div>
