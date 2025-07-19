@@ -216,7 +216,7 @@ export default function ProfilePage() {
                       <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <Label htmlFor="name" className="text-sm lg:text-base">Organization Name</Label>
+                            <Label htmlFor="name" className="text-sm lg:text-base">Name</Label>
                             <Input
                               id="name"
                               value={profileData.name}
