@@ -186,7 +186,7 @@ export default function ProfilePage() {
                     </CardHeader>
                     <CardContent className="flex flex-col items-center">
                       <Avatar className="w-24 h-24 lg:w-32 lg:h-32 mb-4">
-                        <AvatarImage src="/placeholder.svg?height=128&width=128" />
+                        <AvatarImage src="/Mehar.jpg?height=128&width=128" />
                         <AvatarFallback className="text-lg lg:text-2xl">BM</AvatarFallback>
                       </Avatar>
                       <Button variant="outline" className="w-full bg-transparent text-sm lg:text-base">
