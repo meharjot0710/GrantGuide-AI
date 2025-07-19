@@ -202,6 +202,14 @@ export default function DashboardPage() {
               <User className="w-5 h-5 mr-3" />
               Account
             </Link>
+            <Link 
+              href="/applications" 
+              className="flex items-center px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <User className="w-5 h-5 mr-3" />
+              My Applications
+            </Link>
           </nav>
           <div className="px-4 mt-6">
             <Button variant="destructive" className="w-full" onClick={logout}>
@@ -280,7 +288,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center text-sm text-gray-600 mb-4">
                       <Calendar className="w-4 h-4 mr-2" />
-                      <span>Deadline: July. 30, 2025</span>
+                      <span>Deadline: July 30, 2025</span>
                     </div>
                     <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black text-sm">Apply Now</Button>
                   </CardContent>

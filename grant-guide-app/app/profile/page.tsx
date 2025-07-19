@@ -153,6 +153,14 @@ export default function ProfilePage() {
                 <User className="w-5 h-5 mr-3" />
                 Account
               </Link>
+              <Link 
+                href="/applications" 
+                className="flex items-center px-4 py-2 text-gray-900 bg-gray-100 rounded-lg"
+                onClick={() => setSidebarOpen(false)}
+              >
+                <User className="w-5 h-5 mr-3" />
+                My Applications
+              </Link>
             </nav>
             <div className="px-4 mt-6">
               <Button variant="destructive" className="w-full" onClick={logout}>
