@@ -261,7 +261,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center text-sm text-gray-600">
                       <Calendar className="w-4 h-4 mr-2" />
-                      <span>Deadline: Mar 15, 2024</span>
+                      <span>Deadline: Mar 15, 2025</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -280,7 +280,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center text-sm text-gray-600 mb-4">
                       <Calendar className="w-4 h-4 mr-2" />
-                      <span>Deadline: Apr. 4, 2024</span>
+                      <span>Deadline: Apr. 4, 2025</span>
                     </div>
                     <Button className="w-full bg-yellow-400 hover:bg-yellow-500 text-black text-sm">Apply Now</Button>
                   </CardContent>
@@ -299,7 +299,7 @@ export default function DashboardPage() {
                     </Badge>
                     <div className="flex items-center text-sm text-gray-600">
                       <Calendar className="w-4 h-4 mr-2" />
-                      <span>Apr. 14, 2024</span>
+                      <span>Apr. 14, 2025</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -312,7 +312,7 @@ export default function DashboardPage() {
                 <CardContent className="p-4 lg:p-6">
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                     <span className="text-red-600 font-medium text-sm sm:text-base">Deadline in 5 days</span>
-                    <span className="text-gray-600 text-sm sm:text-base">Apr. 14, 2024</span>
+                    <span className="text-gray-600 text-sm sm:text-base">Apr. 14, 2025</span>
                   </div>
                 </CardContent>
               </Card>
