@@ -19,7 +19,7 @@ export default function LoginPage() {
   })
   const [error, setError] = useState("")
   const { login } = useAuth()
-  const apiUrl = 'https://grantguide-ai.onrender.com';
+  const apiUrl = 'http://localhost:5000';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

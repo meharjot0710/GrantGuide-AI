@@ -22,7 +22,7 @@ export default function SignupPage() {
   const [error, setError] = useState("")
   const router = useRouter()
   const { login } = useAuth();
-  const apiUrl = 'https://grantguide-ai.onrender.com';
+  const apiUrl = 'http://localhost:5000';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -34,7 +34,7 @@ export default function SignupPage() {
     }
     
     try {
-      await axios.post(`https://grantguide-ai.onrender.com/api/auth/signup`, {
+      await axios.post(`http://localhost:5000/api/auth/signup`, {
         name: formData.name,
         email: formData.email,
         password: formData.password,

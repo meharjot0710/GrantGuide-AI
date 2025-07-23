@@ -23,7 +23,7 @@ export default function DashboardPage() {
   const [userProfile, setUserProfile] = useState<any>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://grantguide-ai.onrender.com';
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
   const [showDocs, setShowDocs] = useState<{ [key: string]: boolean }>({});
   const requiredDocs: { [key: string]: string[] } = {
     'AI for Accessibility': [
